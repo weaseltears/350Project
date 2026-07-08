@@ -1,4 +1,22 @@
 # 350Project
+
+SPRINT 2:
+
+Requirements:
+-Java 21
+
+Run from root folder cowboymahjong:
+./gradlew run 
+
+on Mac, if GLFW throws a thread error, run from Eclipse with VM Argument -XstartOnFirstThread
+
+Project: Cowboy Mahjong
+-A simple Western-themed 3D Mahjong Game in Java made using jMonkeyEngine
+
+////////////////////////////////////////////////////////////////////////////////////
+
+Sprint 1:
+
 Checklist:
 – Are you in a Group?
 
