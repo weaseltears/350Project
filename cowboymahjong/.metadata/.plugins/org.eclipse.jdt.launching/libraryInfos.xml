@@ -13,4 +13,5 @@
         </endorsedDirs>
     </libraryInfo>
     <libraryInfo home="/Library/Java/JavaVirtualMachines/temurin-25.jdk/Contents/Home" version="25.0.2"/>
+    <libraryInfo home="/opt/homebrew/Cellar/openjdk@21/21.0.11/libexec/openjdk.jdk/Contents/Home" version="21.0.11"/>
 </libraryInfos>
