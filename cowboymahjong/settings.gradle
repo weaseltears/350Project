@@ -14,7 +14,7 @@ dependencyResolutionManagement {
         mavenLocal()
     }
 }
-rootProject.name = "Cowboymahjong"
+rootProject.name = "cowboymahjong"
 include ':desktop'
 
 include ':game'
