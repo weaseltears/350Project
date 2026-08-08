@@ -42,21 +42,21 @@ public class Cowboymahjong extends SimpleApplication implements TileHoverListene
     private void createDeck() {
         for (int value = 1; value <= 9; value++) {
             for (int copy = 0; copy < 4; copy++) {
-                deck.add(new MahjongTile("Textures/dot_" + value + ".png"));
+                deck.add(new MahjongTile("Textures/dot_" + value + ".png", MahJongTile.Suit.DOT, value));
             }
         }
         for (int value = 1; value <= 9; value++) {
             for (int copy = 0; copy < 4; copy++) {
-                deck.add(new MahjongTile("Textures/bamboo_" + value + ".png"));
+                deck.add(new MahjongTile("Textures/bamboo_" + value + ".png", MahjongTile.Suit.BAMBOO, value));
             }
         }
         for (int value = 1; value <= 9; value++) {
             for (int copy = 0; copy < 4; copy++) {
-                deck.add(new MahjongTile("Textures/char_" + value + ".png"));
+                deck.add(new MahjongTile("Textures/char_" + value + ".png", MahjongTile.Suit.CHARACTER, value));
             }
         }
         for (int i = 0; i < 8; i++) {
-            deck.add(new MahjongTile("Textures/joker.png"));
+            deck.add(new MahjongTile("Textures/joker.png", MahjongTile.Suit.JOKER, value));
         }
         Collections.shuffle(deck);
     }
