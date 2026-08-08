@@ -6,10 +6,13 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
 import com.jme3.texture.Texture;
 
+import java.util.HashMap;
+import java.util.Map;
+
 // Builder pattern implementation for making tile spatials
 // Makes tile assembly simpler by putting texture/positioning/scaling/tagging etc
 // lets the caller configure the properties it needs with chained method calls
-// puts off object creation until build() is called
+//puts off object creation until build() is called
 
 public class TileBuilder {
 
@@ -20,8 +23,7 @@ public class TileBuilder {
     private Vector3f position = new Vector3f(0, 0, 0);
     private float scale = 1f;
     private float rotationXDegrees = 0f;
-    private String userDataKey;
-    private Object userDataValue;
+    private Map<String, Object> userDataMap = new HashMap<>();
 
     public TileBuilder(AssetManager assetManager) {
         this.assetManager = assetManager;
@@ -52,9 +54,9 @@ public class TileBuilder {
         return this;
     }
 
+    // Can be called multiple times to attach multiple key/value pairs.
     public TileBuilder userData(String key, Object value) {
-        this.userDataKey = key;
-        this.userDataValue = value;
+        this.userDataMap.put(key, value);
         return this;
     }
 
@@ -79,8 +81,8 @@ public class TileBuilder {
             tile.rotate((float) Math.toRadians(rotationXDegrees), 0, 0);
         }
 
-        if (userDataKey != null) {
-            tile.setUserData(userDataKey, userDataValue);
+        for (Map.Entry<String, Object> entry : userDataMap.entrySet()) {
+            tile.setUserData(entry.getKey(), entry.getValue());
         }
 
         return tile;

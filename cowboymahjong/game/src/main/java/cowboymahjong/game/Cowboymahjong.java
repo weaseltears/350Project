@@ -16,9 +16,13 @@ import com.jme3.input.controls.MouseButtonTrigger;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import java.util.Map;
+import java.util.List;
+
 public class Cowboymahjong extends SimpleApplication implements TileHoverListener {
 
     private ArrayList<MahjongTile> deck = new ArrayList<>();
+    private ArrayList<MahjongTile> handTileData = new ArrayList<>();
 
     // handSpatials[i] and handSlotX[i] describe hand slot i:
     // which spatial currently occupies it, and its fixed x position.
@@ -32,6 +36,10 @@ public class Cowboymahjong extends SimpleApplication implements TileHoverListene
     private static final float RISE_DURATION = 0.4f;
 
     private final TileHoverSubject hoverSubject = new TileHoverSubject();
+    
+    //Checks hand combinations to combo/pair/triplet/run strategies
+    
+    private final CombinationChecker combinationChecker = new CombinationChecker();
 
     public Cowboymahjong() { }
 
@@ -42,7 +50,7 @@ public class Cowboymahjong extends SimpleApplication implements TileHoverListene
     private void createDeck() {
         for (int value = 1; value <= 9; value++) {
             for (int copy = 0; copy < 4; copy++) {
-                deck.add(new MahjongTile("Textures/dot_" + value + ".png", MahJongTile.Suit.DOT, value));
+                deck.add(new MahjongTile("Textures/dot_" + value + ".png", MahjongTile.Suit.DOT, value));
             }
         }
         for (int value = 1; value <= 9; value++) {
@@ -56,7 +64,7 @@ public class Cowboymahjong extends SimpleApplication implements TileHoverListene
             }
         }
         for (int i = 0; i < 8; i++) {
-            deck.add(new MahjongTile("Textures/joker.png", MahjongTile.Suit.JOKER, value));
+            deck.add(new MahjongTile("Textures/joker.png", MahjongTile.Suit.JOKER, 0));
         }
         Collections.shuffle(deck);
     }
@@ -72,7 +80,12 @@ public class Cowboymahjong extends SimpleApplication implements TileHoverListene
     @Override
     public void simpleInitApp() {
         createDeck();
-
+        
+        //combo check to start, ADD AUTODISCARD FOR COMBOS IN OPENING HAND LATER
+        //ADD AUTO DISCARD TO THIS PART
+        
+        checkForCombinations();
+        
         float spacing = 1.5f;
         float startX = -2 * spacing;
 
@@ -93,6 +106,7 @@ public class Cowboymahjong extends SimpleApplication implements TileHoverListene
             rootNode.attachChild(tile);
             handSpatials.add(tile);
             handSlotX.add(x);
+            handTileData.add(hand.get(i));
         }
 
         cam.setLocation(new Vector3f(0, 2, 8));
@@ -156,8 +170,12 @@ public class Cowboymahjong extends SimpleApplication implements TileHoverListene
 
         rootNode.attachChild(newTile);
         handSpatials.set(slot, newTile);
+        handTileData.set(slot, newTileData);
 
         risingTiles.add(new RisingTile(newTile, RISE_START_Y, 0f, RISE_DURATION));
+        
+        //end discard with combo check
+        checkForCombinations();
     }
 
     private Spatial getHoveredTile() {
@@ -173,6 +191,21 @@ public class Cowboymahjong extends SimpleApplication implements TileHoverListene
             return findTileRoot(results.getClosestCollision().getGeometry());
         }
         return null;
+    }
+    
+    // Combo Checker method
+    
+    private void checkForCombinations() {
+        List<MahjongTile> currentHand = new ArrayList<>(handTileData);
+        
+
+        Map<String, List<List<MahjongTile>>> found = combinationChecker.checkHand(currentHand);
+
+        for (Map.Entry<String, List<List<MahjongTile>>> entry : found.entrySet()) {
+            if (!entry.getValue().isEmpty()) {
+                System.out.println("Found " + entry.getValue().size() + " " + entry.getKey() + "(s) in hand");
+            }
+        }
     }
 
     @Override
